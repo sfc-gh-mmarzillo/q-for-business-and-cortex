@@ -1,0 +1,4 @@
+snowflake-connector-python==3.12.3
+snowflake-snowpark-python==1.24.0
+snowflake-core==1.0.0
+cryptography==43.0.1

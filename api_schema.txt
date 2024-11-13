@@ -1,0 +1,88 @@
+openapi: 3.0.0
+info:
+  title: Cortex Search API
+  version: 2.0.0
+servers:
+  - url: https://<apigw>.execute-api.us-west-2.amazonaws.com/prod/
+paths:
+  /search:
+    post:
+      summary: Query the Cortex Search service
+      description: Submit a query to the Cortex Search service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The search query
+        columns:
+          type: array
+          items:
+            type: string
+          description: The columns to retrieve
+          example: ["ROOM_TYPE", "PRICE", "LISTING_TEXT", "AMENITIES", "CANCELLATION_POLICY"]
+        limit:
+          type: integer
+          description: The maximum number of results to return
+          example: 5
+    QueryResponse:
+      type: object
+      required:
+        - results
+        - request_id
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Result'
+        request_id:
+          type: string
+          description: The unique identifier for the request
+    Result:
+      type: object
+      properties:
+        ROOM_TYPE:
+          type: string
+        PRICE:
+          type: string
+        LISTING_TEXT:
+          type: string
+        AMENITIES:
+          type: string
+        CANCELLATION_POLICY:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
